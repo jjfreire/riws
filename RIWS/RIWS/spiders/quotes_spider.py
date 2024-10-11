@@ -1,23 +1,35 @@
 import scrapy
-from RIWS.items import QuoteItem
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
-class QuoteSpider(scrapy.Spider):
-    name = "quotes"
+from RIWS.items import JobItem
 
+
+class JobsSpider(CrawlSpider):
+    name = "jobs_spider"
+    start_page = 1
+    base_url = 'https://www.infojobs.net/ofertas-trabajo?keyword=&segmentId=&page={}&sortBy=PUBLICATION_DATE&onlyForeignCountry=false&sinceDate=ANY'.format(start_page)
     start_urls = [
-        'https://quotes.toscrape.com/'
+        base_url
     ]
+    # rules = (
+    #     Rule(LinkExtractor(allow=r'/regex/'), callback='parse_item', follow=True),
+    # )
+
+    # Resolver problema de que non cargan todos ao principio
 
     def parse(self, response):
-        for quote in response.css('div.quote'):
-            item = QuoteItem()
-            item['text'] = quote.css('span.text::text').get()
-            item['author'] = quote.css('span small::text').get()
-            item['tags'] = quote.css('div.tags a.tag::text').getall()
-
+        for job_li in response.css('ij-Box ij-TemplateAdsPage-main ij-SearchListingPageContent-list'):
+            item = JobItem()
+            item['title'] = job_li.css('h2.ij-OfferCardContent-description-title a::text').get()
+            item['company'] = job_li.css('h3.ij-OfferCardContent-description-subtitle a::text').get()
+            item['description'] = job_li.css('ij-OfferCardContent-description-description ij-OfferCardContent-description-description--hideOnMobile::text').get()
             yield item
 
-        next_page = response.css('li.next a::attr(href)').get()
-        if next_page is not None:
-            next_page = response.urljoin(next_page)
-            yield scrapy.Request(next_page, callback=self.parse)
+
+        current_page = int(response.url.split('page=')[-1].split('&')[0])
+        max_pages = 10
+
+        if current_page < max_pages:
+            next_page_url = self.base_url.format(current_page+1)
+            yield scrapy.Request(next_page_url, callback=self.parse)

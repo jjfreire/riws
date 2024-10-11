@@ -6,7 +6,7 @@
 import scrapy
 
 
-class QuoteItem(scrapy.Item):
+class JobItem(scrapy.Item):
     text = scrapy.Field()
     author = scrapy.Field()
     tags = scrapy.Field()

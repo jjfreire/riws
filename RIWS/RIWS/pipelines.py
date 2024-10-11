@@ -8,7 +8,7 @@ import json
 
 class JsonWriterPipeline:
     def open_spider(self, spider):
-        self.file = open('quotes.json', 'w')
+        self.file = open('jobs.json', 'w')
         self.file.write('[')
         self.first_item = True
 

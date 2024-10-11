@@ -1,2 +1,3 @@
 elasticsearch
 Scrapy
+scrapy-user-agents
