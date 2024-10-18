@@ -19,11 +19,16 @@ class JobsSpider(CrawlSpider):
     # Resolver problema de que non cargan todos ao principio
 
     def parse(self, response):
-        for job_li in response.css('ij-Box ij-TemplateAdsPage-main ij-SearchListingPageContent-list'):
+        for job_li in response.xpath('//div[contains(@class, "ij-Box") and contains(@class, "ij-TemplateAdsPage-main") and contains(@class, "ij-SearchListingPageContent-list")]'):
+        #for job_li in response.css('ij-Box ij-TemplateAdsPage-main ij-SearchListingPageContent-list'):
             item = JobItem()
-            item['title'] = job_li.css('h2.ij-OfferCardContent-description-title a::text').get()
-            item['company'] = job_li.css('h3.ij-OfferCardContent-description-subtitle a::text').get()
-            item['description'] = job_li.css('ij-OfferCardContent-description-description ij-OfferCardContent-description-description--hideOnMobile::text').get()
+            #item['title'] = job_li.css('h2.ij-OfferCardContent-description-title a::text').get()
+            #item['company'] = job_li.css('h3.ij-OfferCardContent-description-subtitle a::text').get()
+            #item['description'] = job_li.css('ij-OfferCardContent-description-description ij-OfferCardContent-description-description--hideOnMobile::text').get()
+            item['title'] = job_li.xpath('.//h2[contains(@class, "ij-OfferCardContent-description-title")]/a/text()').get()
+            item['company'] = job_li.xpath('.//h3[contains(@class, "ij-OfferCardContent-description-subtitle")]/a/text()').get()
+            item['description'] = job_li.xpath('.//div[contains(@class, "ij-OfferCardContent-description-description") and contains(@class, "ij-OfferCardContent-description-description--hideOnMobile")]/text()').get()
+
             yield item
 
 

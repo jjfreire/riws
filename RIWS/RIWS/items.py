@@ -7,7 +7,7 @@ import scrapy
 
 
 class JobItem(scrapy.Item):
-    text = scrapy.Field()
-    author = scrapy.Field()
-    tags = scrapy.Field()
+    title = scrapy.Field()
+    company = scrapy.Field()
+    description = scrapy.Field()
     pass
