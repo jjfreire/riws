@@ -172,7 +172,7 @@ class JobsSpider(scrapy.Spider):
                 self.logger.info("Cookie consent banner not found.")
 
         for i in range(1, 70):
-            ActionChains(driver).scroll_by_amount(0, 100).perform()
+            driver.execute_script("window.scrollBy(0, 100);")
             time.sleep(0.000025)
 
         selector = Selector(text=driver.page_source)
@@ -192,7 +192,7 @@ class JobsSpider(scrapy.Spider):
 
 
         current_page = int(response.url.split('page=')[-1].split('&')[0])
-        max_pages = 10
+        max_pages = 100
 
         if current_page < max_pages:
             next_page_url = self.base_url.format(current_page+1)
