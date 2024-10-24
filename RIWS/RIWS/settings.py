@@ -7,6 +7,8 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from shutil import which
+
 BOT_NAME = "RIWS"
 
 SPIDER_MODULES = ["RIWS.spiders"]
@@ -53,6 +55,12 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_ARGUMENTS = [] # change it to ['-headless'] run in headless mode
+
+DOWNLOADER_MIDDLEWARES = {
+     'scrapy_selenium.SeleniumMiddleware': 800
+}
 #DOWNLOADER_MIDDLEWARES = {
 #    "RIWS.middlewares.RiwsDownloaderMiddleware": 543,
 #}

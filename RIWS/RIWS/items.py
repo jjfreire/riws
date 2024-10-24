@@ -10,4 +10,7 @@ class JobItem(scrapy.Item):
     title = scrapy.Field()
     company = scrapy.Field()
     description = scrapy.Field()
+    link = scrapy.Field()
+    location = scrapy.Field()
+    modality = scrapy.Field()
     pass
