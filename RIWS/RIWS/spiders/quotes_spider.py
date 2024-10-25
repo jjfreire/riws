@@ -193,7 +193,16 @@ class JobsSpider(scrapy.Spider):
                 item['workday'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(2)::text').get()
 
                 item['location'] = job_li.css('span.ij-OfferCardContent-description-list-item-truncate::text').get()
-                # item['modality']
+
+                ul = job_li.css('ul.ij-OfferCardContent-description-list')
+                li_elements = ul.css('li')
+                li_count = len(li_elements)
+
+                if li_count == 6:
+                    item['modality'] = li_elements[1].css('::text').get()
+                else:
+                    item['modality'] = "No especificado"
+
                 yield item
 
 
