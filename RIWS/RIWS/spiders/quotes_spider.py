@@ -189,6 +189,9 @@ class JobsSpider(scrapy.Spider):
                 if item['salary'] is None:
                     item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-no-information::text').get()
                 
+                item['duration'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(1)::text').get()
+                item['workday'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(2)::text').get()
+
                 # item['location']
                 # item['modality']
                 yield item
