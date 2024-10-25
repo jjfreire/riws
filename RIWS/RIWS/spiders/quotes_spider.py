@@ -192,7 +192,7 @@ class JobsSpider(scrapy.Spider):
                 item['duration'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(1)::text').get()
                 item['workday'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(2)::text').get()
 
-                # item['location']
+                item['location'] = job_li.css('span.ij-OfferCardContent-description-list-item-truncate::text').get()
                 # item['modality']
                 yield item
 
