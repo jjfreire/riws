@@ -11,6 +11,7 @@ class JobItem(scrapy.Item):
     company = scrapy.Field()
     description = scrapy.Field()
     link = scrapy.Field()
+    salary = scrapy.Field()
     location = scrapy.Field()
     modality = scrapy.Field()
     pass

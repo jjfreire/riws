@@ -185,6 +185,9 @@ class JobsSpider(scrapy.Spider):
                 item['company'] = job_li.css('h3.ij-OfferCardContent-description-subtitle a::text').get()
                 item['description'] = job_li.css('p.ij-OfferCardContent-description-description.ij-OfferCardContent-description-description--hideOnMobile::text').get()
                 item['link'] = re.sub(r"^\/\/", "", job_li.css('h2.ij-OfferCardContent-description-title a::attr(href)').get())
+                item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-info::text').get()
+                if item['salary'] is None:
+                    item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-no-information::text').get()
                 
                 # item['location']
                 # item['modality']
@@ -192,7 +195,7 @@ class JobsSpider(scrapy.Spider):
 
 
         current_page = int(response.url.split('page=')[-1].split('&')[0])
-        max_pages = 100
+        max_pages = 5
 
         if current_page < max_pages:
             next_page_url = self.base_url.format(current_page+1)
