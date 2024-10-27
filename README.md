@@ -67,12 +67,14 @@ https://anti-captcha.com/apidoc/task-types/GeeTestTaskProxyless
 
         ```
 3. Execución de ElasticSearch-head:
-    > [!NOTE]
-    > Dentro da localización onde se clonou o repositorio.
-    ```bash
+> [!NOTE]
+> Dentro da localización onde se clonou o repositorio.
+>
+    
+    
     cd elasticsearch-head
     npm install
     npm run start
-    ```
-    * Abre http://localhost:9100/
+    
+* Abrir http://localhost:9100/
     
