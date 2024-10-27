@@ -66,7 +66,12 @@ https://anti-captcha.com/apidoc/task-types/GeeTestTaskProxyless
         http.cors.allow-origin: "*"
 
         ```
-3. Execución de ElasticSearch-head:
+
+3. Reinicio do servizo `elasticsearch.service`
+    ```bash
+    sudo systemctl restart elasticsearch.service 
+    ```
+4. Execución de ElasticSearch-head:
 > [!NOTE]
 > Dentro da localización onde se clonou o repositorio.
 >
