@@ -20,3 +20,59 @@ Porque se modificou o [middlewares.py](./venv/lib/python3.12/site-packages/scrap
 https://github.com/JoeHO888/Geetest-Icon-CAPTCHA-Solving/blob/master/README.md
 
 https://anti-captcha.com/apidoc/task-types/GeeTestTaskProxyless
+
+### ElasticSearch
+
+**Configuración ElasticSearch**
+
+1. Descargar ElasticSearch: https://www.elastic.co/downloads/elasticsearch
+2. Configuración de ElasticSearch: 
+    - Edición do arquivo de configuración `elasticsearch.yml`:
+        ```bash
+        sudo nano /etc/elasticsearch/elasticsearch.yml 
+        ```
+    - Modificación das seguintes liñas: 
+        ```bash
+        # Enable security features
+        xpack.security.enabled: false
+
+        xpack.security.enrollment.enabled: false
+        ```
+3. Reinicio do servizo `elasticsearch.service`
+    ```bash
+    sudo systemctl restart elasticsearch.service 
+    ```
+
+
+
+**Uso da interface ElasticSearch-head**
+
+1. Descarga do repositorio de elastic-head:
+    ```bash
+    git clone git://github.com/mobz/elasticsearch-head.git 
+    ```
+2. Configuración de `elasticsearch.yml` para permitir a comunicación:
+
+    ```bash
+    sudo nano /etc/elasticsearch/elasticsearch.yml 
+    ```
+
+    - Adición das seguintes liñas ao arquivo:
+
+        ```bash
+        # ---------------------------------- Various -----------------------------------
+        http.cors.enabled: true
+
+        http.cors.allow-origin: "*"
+
+        ```
+3. Execución de ElasticSearch-head:
+    > [!NOTE]
+    > Dentro da localización onde se clonou o repositorio.
+    ```bash
+    cd elasticsearch-head
+    npm install
+    npm run start
+    ```
+    * Abre http://localhost:9100/
+    
