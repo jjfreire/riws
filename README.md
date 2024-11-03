@@ -72,14 +72,5 @@ https://anti-captcha.com/apidoc/task-types/GeeTestTaskProxyless
     sudo systemctl restart elasticsearch.service 
     ```
 4. Execución de ElasticSearch-head:
-> [!NOTE]
-> Dentro da localización onde se clonou o repositorio.
->
-    
-    
-    cd elasticsearch-head
-    npm install
-    npm run start
-    
-* Abrir http://localhost:9100/
+Abrir nun navegador o arquivo index.html do repositorio clonado.
     
