@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import ElasticsearchAPIConnector from "@elastic/search-ui-elasticsearch-connector";
 
@@ -42,9 +42,6 @@ const config = {
         description: {
           weight: 2
         },
-        salary: {
-          weight: 2
-        },
         location: {
           weight: 1
         },
@@ -70,7 +67,10 @@ const config = {
         description: {
           snippet: {}
         },
-        salary: {
+        min_salary: {
+          raw: {}
+        },
+        max_salary: {
           raw: {}
         },
         location: {
@@ -91,6 +91,9 @@ const config = {
         link: {
           raw: {}
         },
+        image: {
+          raw: {}
+        }
 
       },
 
@@ -104,6 +107,18 @@ const config = {
         "location.keyword": { type: "value" },
         "company.keyword": { type: "value" },
         "duration.keyword": { type: "value" },
+
+        min_salary: {
+          type: "range",
+          ranges: [
+            { from: 0, to: 20000, name: "0-20k" },
+            { from: 20000, to: 40000, name: "20k-40k" },
+            { from: 40000, to: 60000, name: "40k-60k" },
+            { from: 60000, to: 80000, name: "60k-80k" },
+            { from: 80000, name: "80k+" }
+            ]
+        }
+
       }
     },
     
@@ -136,6 +151,76 @@ const config = {
   
 };
 
+const CustomResultView = ({ result }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const descriptionText = result.description.raw || "";
+  const shortenedDescription = descriptionText.slice(0, 150);
+
+  return (
+    <li className="sui-result">
+      <div className="sui-result__header">
+        <a
+          className="sui-result__title sui-result__title-link"
+          href={result.link.raw}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {result.title.raw}
+        </a>
+      </div>
+      <div className="sui-result__body">
+        <div className="sui-result__image">
+          {result.image && <img src={result.image.raw} alt={result.title.raw} />}
+        </div>
+        <ul className="sui-result__details">
+          <li>
+            <span className="sui-result__title-link">Company: </span>{" "}
+            <span className="sui-result__value">{result.company.raw}</span>
+          </li>
+          <li>
+              <span className="sui-result__title-link">Description: </span>{" "}
+              <span className="sui-result__value">
+                {isExpanded ? descriptionText : `${shortenedDescription}... `}
+                <button onClick={toggleExpanded} className="toggle-button">
+                  {isExpanded ? "Ver menos" : "Ver más"}
+                </button>
+              </span>
+            </li>
+          <li>
+            <span className="sui-result__title-link">Min_salary: </span>{" "}
+            <span className="sui-result__value">{result.min_salary && result.min_salary.raw ? result.min_salary.raw + "€": "N/A"}</span>
+          </li>
+          <li>
+            <span className="sui-result__title-link">Max_salary: </span>{" "}
+            <span className="sui-result__value">{result.max_salary && result.max_salary.raw ? result.max_salary.raw + "€" : "N/A"}</span>
+          </li>
+          <li>
+            <span className="sui-result__title-link">Duration: </span>{" "}
+            <span className="sui-result__value">{result.duration.raw}</span>
+          </li>
+          <li>
+            <span className="sui-result__title-link">Workday: </span>{" "}
+            <span className="sui-result__value">{result.workday.raw}</span>
+          </li>
+          <li>
+            <span className="sui-result__title-link">Location: </span>{" "}
+            <span className="sui-result__value">{result.location.raw}</span>
+          </li>
+          <li>
+            <span className="sui-result__title-link">Modality: </span>{" "}
+            <span className="sui-result__value">{result.modality.raw}</span>
+          </li>
+        </ul>
+      </div>
+    </li>
+  );
+}
+
 export default function App() {
   return (
     <SearchProvider config={config}>
@@ -152,7 +237,7 @@ export default function App() {
                         linkTarget: "_blank",
                         sectionTitle: "Results",
                         titleField: "title",
-                        urlField: "url",
+                        urlField: "link",
                         shouldTrackClickThrough: true
                       }}
                       autocompleteSuggestions={true}
@@ -161,6 +246,7 @@ export default function App() {
                   }
                   sideContent={
                     <div>
+                      <Facet key={"6"} field={"min_salary"} label={"Salary"} />
                       <Facet key={"1"} field={"modality.keyword"} label={"Modality"} />
                       <Facet key={"2"} field={"workday.keyword"} label={"Workday"} />
                       <Facet key={"3"} field={"location.keyword"} label={"Location"} />
@@ -170,10 +256,11 @@ export default function App() {
                   }
                   bodyContent={
                     <Results
-                      titleField={getConfig().titleField}
-                      urlField={getConfig().urlField}
-                      thumbnailField={getConfig().thumbnailField}
+                      titleField="title"
+                      urlField="link"
+                      thumbnailField="image"
                       shouldTrackClickThrough={true}
+                      resultView={CustomResultView}
                     />
                   }
                   bodyHeader={

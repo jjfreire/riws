@@ -18,7 +18,8 @@ mapping = {
             },
             "description": {"type": "text"},
             "link": {"type": "text"},
-            "salary": {"type": "text"},
+            "min_salary": {"type": "long"},
+            "max_salary": {"type": "long"},
             "duration": {
                 "type": "text",
                 "fields": {
