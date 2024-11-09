@@ -83,8 +83,7 @@ class JobsSpider(scrapy.Spider):
                 else:
                     item['modality'] = "No especificado"
 
-                image = job_li.css('img.sui-AtomImage-image').attrib['src']
-                item['image'] = image
+                item['image'] = job_li.css('img.sui-AtomImage-image').attrib['src']
                 yield item
 
 
