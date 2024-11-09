@@ -65,6 +65,11 @@ https://anti-captcha.com/apidoc/task-types/GeeTestTaskProxyless
 
         http.cors.allow-origin: "*"
 
+        http.cors.allow-credentials: true
+        http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+        http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept, x-elastic-client-meta
+
+
         ```
 
 3. Reinicio do servizo `elasticsearch.service`

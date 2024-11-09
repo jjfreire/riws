@@ -8,14 +8,49 @@ mapping = {
     "mappings": {
         "properties": {
             "title": {"type": "text"},
-            "company": {"type": "text"},
+            "company": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
             "description": {"type": "text"},
             "link": {"type": "text"},
             "salary": {"type": "text"},
-            "duration": {"type": "text"},
-            "workday": {"type": "text"},
-            "location": {"type": "text"},
-            "modality": {"type": "text"}
+            "duration": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "workday": {
+                "type": "text",
+                "fields":{
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "location": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "modality": {
+                "type": "text",
+                "fields": {
+                    "keyword": {
+                        "type": "keyword"
+                    }
+                }
+            },
         }
     }
 }

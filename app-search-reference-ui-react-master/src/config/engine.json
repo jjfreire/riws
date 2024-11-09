@@ -1,0 +1,25 @@
+{
+    "endpointBase": "http://localhost:9200",
+    "engineName": "jobs",
+    "searchKey": "search-nyxkw1fuqex9qjhfvatbqfmw",
+    "searchFields": ["title", "description", "states"],
+    "resultFields": [
+      "id",
+      "title",
+      "company",
+      "description",
+      "link",
+      "salary",
+      "duration",
+      "workday",
+      "location",
+      "modality",
+      "image"
+    ],
+    "querySuggestFields": ["title"],
+    "titleField": "title",
+    "urlField": "link",
+    "thumbnailField": "image",
+    "sortFields": ["id", "title"],
+    "facets": ["company", "salary", "duration", "workday", "location", "modality"]
+  }
