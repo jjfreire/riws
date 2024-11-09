@@ -64,14 +64,55 @@ class JobsSpider(scrapy.Spider):
         for job_li in selector.css('main.ij-Box.ij-TemplateAdsPage-main.ij-SearchListingPageContent-list li'):
             title = job_li.css('h2.ij-OfferCardContent-description-title a::text').get()
             if title is not None:
+                def set_salary_vars(item, salary):
+                    min_salary = None
+                    max_salary = None
+
+                    """
+                    Explicación de la regex:
+                        Primer grupo de captura: (\d+(?:\.\d{3})*)
+                            \d+               -> Uno o más dígitos
+                            (?:\.\d{3})*      -> Grupo NO capturador que permite un punto seguido de (exactamente) 3 dígitos
+                                *             -> El asterisco permite que ese patrón se repita 0 o más veces
+
+                            El grupo no capturador se utiliza para usar un patrón que queremos hacer que coincida con 
+                            partes de la cadena pero sin capturar esas coincidencias como grupos separados adicionales.
+
+                        Segundo grupo de captura: (?:.*?(\d+(?:\.\d{3})*))?
+                            ?:.*?             -> Grupo NO capturador que ignora cualquier texto entre los dos números, coincidiendo con 
+                                                 la menor cantidad posible de caracteres antes de buscar el siguiente número 
+                                                 (*?, non-greedy)
+                            (\d+(?:\.\d{3})*) -> Mismo grupo de captura que el "Primer grupo de captura". Explicación arriba.
+                            ?                 -> Hace que el segundo número sea opcional, por lo que puede únicamente estar presente un número.
+                        
+                    """
+                    regex = r'(\d+(?:\.\d{3})*)(?:.*?(\d+(?:\.\d{3})*))?'
+
+                    if salary:
+                        match = re.search(regex, salary)
+                        if match:
+                            # Capturar el primer número (siempre presente si hay match)
+                            min_value = int(match.group(1).replace('.', ''))
+                            # Capturar el segundo número (si existe)
+                            max_value = int(match.group(2).replace('.', '')) if match.group(2) else min_value
+                            
+                            if 'mes' in salary.lower():
+                                min_salary, max_salary = min_value*12, max_value*12
+                            else:
+                                min_salary, max_salary = min_value, max_value
+
+                    item['min_salary'] = min_salary
+                    item['max_salary'] = max_salary                  
+                
                 item = JobItem()
                 item['title'] = title
                 item['company'] = job_li.css('h3.ij-OfferCardContent-description-subtitle a::text').get()
                 item['description'] = job_li.css('p.ij-OfferCardContent-description-description.ij-OfferCardContent-description-description--hideOnMobile::text').get()
-                item['link'] = re.sub(r"^\/\/", "", job_li.css('h2.ij-OfferCardContent-description-title a::attr(href)').get())
-                item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-info::text').get()
-                if item['salary'] is None:
-                    item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-no-information::text').get()
+                item['link'] = 'https://' + re.sub(r"^\/\/", "", job_li.css('h2.ij-OfferCardContent-description-title a::attr(href)').get())
+                salary = job_li.css('span.ij-OfferCardContent-description-salary-info::text').get()
+                if salary is None:
+                    salary = job_li.css('span.ij-OfferCardContent-description-salary-no-information::text').get()
+                set_salary_vars(item, salary)
                 item['duration'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(1)::text').get()
                 item['workday'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(2)::text').get()
                 item['location'] = job_li.css('span.ij-OfferCardContent-description-list-item-truncate::text').get()
