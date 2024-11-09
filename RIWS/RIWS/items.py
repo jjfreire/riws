@@ -16,5 +16,6 @@ class JobItem(scrapy.Item):
     workday = scrapy.Field()
     duration = scrapy.Field()
     modality = scrapy.Field()
+    image = scrapy.Field()
 
     pass

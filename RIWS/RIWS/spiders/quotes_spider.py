@@ -72,21 +72,19 @@ class JobsSpider(scrapy.Spider):
                 item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-info::text').get()
                 if item['salary'] is None:
                     item['salary'] = job_li.css('span.ij-OfferCardContent-description-salary-no-information::text').get()
-                
                 item['duration'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(1)::text').get()
                 item['workday'] = job_li.css('li.ij-OfferCardContent-description-list-item.ij-OfferCardContent-description-list-item--hideOnMobile:nth-of-type(2)::text').get()
-
                 item['location'] = job_li.css('span.ij-OfferCardContent-description-list-item-truncate::text').get()
-
                 ul = job_li.css('ul.ij-OfferCardContent-description-list')
                 li_elements = ul.css('li')
                 li_count = len(li_elements)
-
                 if li_count == 6:
                     item['modality'] = li_elements[1].css('::text').get()
                 else:
                     item['modality'] = "No especificado"
 
+                image = job_li.css('img.sui-AtomImage-image').attrib['src']
+                item['image'] = image
                 yield item
 
 
