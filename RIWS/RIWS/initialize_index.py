@@ -69,7 +69,17 @@ else:
 with open('../jobs.json', 'r') as f:
     jobs = json.load(f)
 
-for i, job in enumerate(jobs):
+
+unique_jobs = set()
+filtered_jobs = []
+
+for job in jobs:
+    unique_key = (job["title"], job["company"], job["min_salary"], job["max_salary"], job["location"])
+    if unique_key not in unique_jobs:
+        unique_jobs.add(unique_key)
+        filtered_jobs.append(job)
+
+for i, job in enumerate(filtered_jobs):
     doc_id = i + 1
     if not es.exists(index=index_name, id=doc_id):
         es.index(index=index_name, id=doc_id, body=job)
