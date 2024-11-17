@@ -1,0 +1,24 @@
+cluster.name: "docker-cluster"
+node.name: "elasticsearch"
+network.host: 0.0.0.0
+
+# Disable security features entirely
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false
+
+# Disable SSL for HTTP and transport layers
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+
+# Create a new cluster with the current node only
+# Additional nodes can still join the cluster later
+cluster.initial_master_nodes: ["elasticsearch"]
+
+# ---------------------------------- Various -----------------------------------
+http.cors.enabled: true
+
+http.cors.allow-origin: "*"
+http.cors.allow-credentials: true
+http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept, x-elastic-client-meta
+
