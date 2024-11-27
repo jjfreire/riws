@@ -2,10 +2,11 @@ import time
 import scrapy
 import re
 import time
+import os
+import json
 
 from scrapy.selector import Selector
 from scrapy_selenium import SeleniumRequest
-from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -23,7 +24,12 @@ class JobsSpider(scrapy.Spider):
     allowed_domains = ["www.infojobs.net"]
     captcha_solved = False
     cookie_clicked = False
-    max_pages = 100
+
+    config_path = os.path.join(os.path.dirname(__file__), '..', 'config.json')
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+
+    max_pages = min(config.get('max_pages', 100), 400)  # 100 por defecto, 400 como máximo
 
     def start_requests(self):
         url = self.base_url.format(self.start_page)
