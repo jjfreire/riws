@@ -81,3 +81,6 @@ Because of dynamic content loading and captcha solving. Without Selenium we woul
 ### Why not more than 400 pages? Hardcoded value in [quotes_spider.py](./RIWS/RIWS/spiders/quotes_spider.py), line 32
 
 Retrieving the jobs would be time-consuming, unnecessary, and could also introduce additional issues with CAPTCHAs.
+
+## License
+This project is licensed under the **Custom Non-Commercial License**. It may be used for educational and research purposes only. Commercial use is prohibited without explicit written consent from the contributors. See the [LICENSE](./LICENSE) file for more details.
